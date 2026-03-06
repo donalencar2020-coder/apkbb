@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#081120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>SAGRADO 🙏</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./app.js"></script>
+</head>
+<body data-theme="dark">
+  <div class="app-shell">
+    <header class="app-header surface">
+      <div class="brand-copy">
+        <p class="eyebrow">Gestão Financeira · Igreja</p>
+        <h1>SAGRADO <span>🙏</span></h1>
+        <p class="subtitle">Controle financeiro offline com lançamentos diários, depósitos inteligentes e relatórios mensais.</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn ghost" id="themeToggle">Tema: escuro</button>
+      </div>
+    </header>
+
+    <div class="toast hidden" id="toast" aria-live="polite"></div>
+
+    <main class="main-content">
+      <section class="tab-panel active" data-tab="inicio" aria-labelledby="tabInicio">
+        <div class="stack">
+          <article class="hero surface">
+            <div>
+              <p class="eyebrow">Início</p>
+              <h2>Bem-vindo ao controle financeiro da igreja.</h2>
+              <p class="hero-copy">Acompanhe os lançamentos do dia, visualize depósitos provisionados e consulte relatórios mensais em uma interface simples, rápida e adaptada para celular e desktop.</p>
+            </div>
+            <div class="hero-metrics">
+              <div class="metric">
+                <span>Total do mês</span>
+                <strong id="homeMonthTotal">R$ 0,00</strong>
+              </div>
+            </div>
+          </article>
+
+          <section class="card-grid" aria-label="Atalhos principais">
+            <button type="button" class="nav-card surface" data-go-tab="lancamento">
+              <span class="nav-card-tag">LD</span>
+              <strong>Lançamento Diário</strong>
+              <p>Registrar a movimentação completa do dia.</p>
+            </button>
+            <button type="button" class="nav-card surface" data-go-tab="deposito">
+              <span class="nav-card-tag">DP</span>
+              <strong>Depósito</strong>
+              <p>Consultar os provisionamentos automáticos da semana.</p>
+            </button>
+            <button type="button" class="nav-card surface" data-go-tab="historico">
+              <span class="nav-card-tag">HT</span>
+              <strong>Histórico</strong>
+              <p>Filtrar, revisar e editar registros já salvos.</p>
+            </button>
+            <button type="button" class="nav-card surface" data-go-tab="total">
+              <span class="nav-card-tag">TM</span>
+              <strong>Total Mensais</strong>
+              <p>Ver evolução diária e totais do mês selecionado.</p>
+            </button>
+          </section>
+
+          <article class="info-note surface">
+            <strong>Observação</strong>
+            <p>Este sistema serve para o controle financeiro da igreja, com registro de lançamentos diários, acompanhamento de depósitos e relatórios mensais salvos localmente no navegador.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab-panel" data-tab="lancamento" aria-labelledby="tabLancamento">
+        <div class="stack">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Lançamento Diário</p>
+              <h2 id="launchSectionTitle">Novo lançamento</h2>
+            </div>
+            <span class="section-badge" id="launchModeBadge">Modo cadastro</span>
+          </div>
+
+          <form id="launchForm" class="stack" novalidate>
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Identificação</h3>
+                  <p>Dados principais do lançamento.</p>
+                </div>
+              </div>
+
+              <div class="field-grid field-grid-3">
+                <label class="field">
+                  <span>Igreja</span>
+                  <input type="text" name="igreja" id="igrejaInput" placeholder="Nome da igreja" required>
+                </label>
+                <label class="field">
+                  <span>Data</span>
+                  <input type="date" name="data" id="dataInput" required>
+                </label>
+                <label class="field">
+                  <span>Dia da Semana</span>
+                  <select name="diaSemana" id="diaSemanaInput" disabled>
+                    <option value="">Selecione uma data</option>
+                    <option value="Domingo">Domingo</option>
+                    <option value="Segunda">Segunda</option>
+                    <option value="Terça">Terça</option>
+                    <option value="Quarta">Quarta</option>
+                    <option value="Quinta">Quinta</option>
+                    <option value="Sexta">Sexta</option>
+                    <option value="Sábado">Sábado</option>
+                  </select>
+                </label>
+              </div>
+            </article>
+
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Movimentações Financeiras</h3>
+                  <p>Valores financeiros base do dia.</p>
+                </div>
+              </div>
+
+              <div class="field-grid field-grid-3">
+                <label class="field">
+                  <span>Depósito</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="deposito" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>DP Provisionado</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="dp" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>App</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="app" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Débito</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="debito" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Crédito</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="credito" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Boletos</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="boletos" placeholder="0,00">
+                </label>
+              </div>
+            </article>
+
+            <article class="surface total-card">
+              <span>Total do Dia</span>
+              <strong id="totalDayValue">R$ 0,00</strong>
+            </article>
+
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Informativo</h3>
+                  <p>Campos informativos sem impacto no depósito inteligente.</p>
+                </div>
+              </div>
+
+              <div class="field-grid field-grid-4">
+                <label class="field">
+                  <span>Folha</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="folha" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>OF EBI</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="ofEbi" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Jornal EBI</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="jornal" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>OF FJU</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="ofFju" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Bíblia</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="biblia" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Literatura</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="literatura" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>Crachá</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="cracha" placeholder="0,00">
+                </label>
+              </div>
+            </article>
+
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Horários Reuniões</h3>
+                  <p>Valores das reuniões somados no total do dia, com edição normal.</p>
+                </div>
+              </div>
+
+              <div class="field-grid field-grid-3">
+                <label class="field">
+                  <span>08h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h08" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>10h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h10" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>12h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h12" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>15h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h15" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>19h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h19" placeholder="0,00">
+                </label>
+                <label class="field">
+                  <span>19:30h</span>
+                  <input type="number" step="0.01" min="0" inputmode="decimal" name="h1930" placeholder="0,00">
+                </label>
+              </div>
+
+              <div class="total-inline">
+                <span>Total de Reuniões</span>
+                <strong id="meetingTotalValue">R$ 0,00</strong>
+              </div>
+            </article>
+
+            <div class="button-row">
+              <button type="submit" class="btn primary" id="saveLaunchButton">Salvar Dia</button>
+              <button type="button" class="btn ghost" id="clearLaunchButton">Limpar</button>
+              <button type="button" class="btn danger" id="deleteAllButton">Excluir Todos</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="tab-panel" data-tab="deposito" aria-labelledby="tabDeposito">
+        <div class="stack">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Depósito</p>
+              <h2>Depósito Inteligente</h2>
+            </div>
+            <span class="section-badge" id="depositReferenceLabel">Base semanal do dispositivo</span>
+          </div>
+
+          <div class="card-grid" id="depositCards"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" data-tab="historico" aria-labelledby="tabHistorico">
+        <div class="stack">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Histórico</p>
+              <h2>Lançamentos salvos</h2>
+            </div>
+            <span class="section-badge" id="historyCountBadge">0 itens</span>
+          </div>
+
+          <article class="surface section-card">
+            <div class="section-head compact">
+              <div>
+                <h3>Filtros</h3>
+                <p>Refine a listagem por igreja e data.</p>
+              </div>
+            </div>
+
+            <div class="field-grid field-grid-3">
+              <label class="field">
+                <span>Igreja</span>
+                <select id="historyChurchFilter">
+                  <option value="">Todas as Igrejas</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Data</span>
+                <input type="date" id="historyDateFilter">
+              </label>
+            </div>
+
+            <div class="button-row">
+              <button type="button" class="btn primary" id="applyHistoryFilterButton">Filtrar</button>
+              <button type="button" class="btn ghost" id="clearHistoryFilterButton">Limpar Filtro</button>
+            </div>
+          </article>
+
+          <div class="stack" id="historyList"></div>
+          <article class="empty-state surface hidden" id="historyEmpty">
+            <strong>Nenhum lançamento encontrado.</strong>
+            <p>Salve um lançamento ou ajuste os filtros para ver os registros nesta área.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab-panel" data-tab="total" aria-labelledby="tabTotal">
+        <div class="stack">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Total e Relatórios</p>
+              <h2>Relatórios mensais</h2>
+            </div>
+            <span class="section-badge" id="reportRangeBadge">Mês atual</span>
+          </div>
+
+          <article class="surface section-card">
+            <div class="section-head compact">
+              <div>
+                <h3>Seletores</h3>
+                <p>Escolha o mês e o ano para atualizar o relatório.</p>
+              </div>
+            </div>
+
+            <div class="field-grid field-grid-3">
+              <label class="field">
+                <span>Ano</span>
+                <select id="reportYearSelect"></select>
+              </label>
+              <label class="field">
+                <span>Mês</span>
+                <select id="reportMonthSelect"></select>
+              </label>
+            </div>
+
+            <div class="button-row">
+              <button type="button" class="btn primary" id="updateReportButton">Atualizar</button>
+            </div>
+          </article>
+
+          <article class="surface total-card total-card-month">
+            <span>Total do mês selecionado</span>
+            <strong id="monthTotalValue">R$ 0,00</strong>
+          </article>
+
+          <article class="surface section-card">
+            <div class="section-head compact">
+              <div>
+                <h3>Evolução Diária</h3>
+                <p>Gráfico de desempenho do mês selecionado.</p>
+              </div>
+            </div>
+            <div class="chart-shell">
+              <div class="chart-grid" id="dailyChart"></div>
+            </div>
+          </article>
+
+          <div class="report-grid">
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Dias do mês</h3>
+                  <p>Selecione um dia para ver o detalhe.</p>
+                </div>
+              </div>
+
+              <div class="stack" id="monthDaysList"></div>
+              <div class="empty-state hidden" id="monthDaysEmpty">
+                <strong>Nenhum dia com lançamento.</strong>
+                <p>O detalhamento será exibido quando houver registros no mês selecionado.</p>
+              </div>
+            </article>
+
+            <article class="surface section-card">
+              <div class="section-head compact">
+                <div>
+                  <h3>Detalhe do dia</h3>
+                  <p>Resumo dos lançamentos vinculados à data selecionada.</p>
+                </div>
+              </div>
+
+              <div id="dayDetail"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav surface" aria-label="Navegação por abas">
+      <button type="button" class="nav-button active" id="tabInicio" data-tab-btn="inicio">
+        <span>IN</span>
+        <strong>Início</strong>
+      </button>
+      <button type="button" class="nav-button" id="tabLancamento" data-tab-btn="lancamento">
+        <span>LC</span>
+        <strong>Lançamento</strong>
+      </button>
+      <button type="button" class="nav-button" id="tabDeposito" data-tab-btn="deposito">
+        <span>DP</span>
+        <strong>Depósito</strong>
+      </button>
+      <button type="button" class="nav-button" id="tabHistorico" data-tab-btn="historico">
+        <span>HT</span>
+        <strong>Histórico</strong>
+      </button>
+      <button type="button" class="nav-button" id="tabTotal" data-tab-btn="total">
+        <span>TL</span>
+        <strong>Total</strong>
+      </button>
+    </nav>
+  </div>
+</body>
+</html>

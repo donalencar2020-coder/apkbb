@@ -7,8 +7,2031 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>SAGRADO 🙏</title>
-  <link rel="stylesheet" href="./styles.css">
-  <script defer src="./app.js"></script>
+  <style>
+:root {
+  --font-display: "Segoe UI Variable Display", "Bahnschrift", "Trebuchet MS", sans-serif;
+  --font-body: "Segoe UI Variable Text", "Aptos", "Segoe UI", sans-serif;
+  --bg-1: #081120;
+  --bg-2: #101b33;
+  --bg-3: #17284a;
+  --surface: rgba(11, 20, 36, 0.82);
+  --surface-strong: rgba(18, 31, 53, 0.96);
+  --surface-soft: rgba(15, 25, 44, 0.74);
+  --line: rgba(164, 188, 226, 0.14);
+  --text: #f3f7ff;
+  --muted: #95a6c7;
+  --primary: #67a6ff;
+  --primary-strong: #99c3ff;
+  --accent: #3fd8c2;
+  --danger: #ff7d94;
+  --shadow: 0 24px 50px rgba(0, 0, 0, 0.34);
+  --shadow-soft: 0 16px 32px rgba(0, 0, 0, 0.22);
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-md: 18px;
+  --radius-sm: 14px;
+  --motion-fast: 180ms;
+  --motion-base: 280ms;
+  --motion-slow: 420ms;
+  --ease-smooth: cubic-bezier(.22, 1, .36, 1);
+}
+
+body[data-theme="light"] {
+  --bg-1: #eef4ff;
+  --bg-2: #dde7fb;
+  --bg-3: #cddafb;
+  --surface: rgba(255, 255, 255, 0.84);
+  --surface-strong: rgba(255, 255, 255, 0.96);
+  --surface-soft: rgba(246, 249, 255, 0.82);
+  --line: rgba(20, 35, 67, 0.1);
+  --text: #132444;
+  --muted: #5a6a86;
+  --primary: #0f63ff;
+  --primary-strong: #0d48b8;
+  --accent: #058c8b;
+  --danger: #d43d64;
+  --shadow: 0 20px 42px rgba(15, 35, 71, 0.14);
+  --shadow-soft: 0 14px 28px rgba(15, 35, 71, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(63, 216, 194, 0.16), transparent 26%),
+    radial-gradient(circle at top right, rgba(103, 166, 255, 0.18), transparent 24%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+select,
+button {
+  max-width: 100%;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(103, 166, 255, 0.34);
+  outline-offset: 2px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.app-shell {
+  width: min(1120px, calc(100% - clamp(14px, 3vw, 28px)));
+  margin: 0 auto;
+  padding: clamp(12px, 2.4vw, 20px) 0 118px;
+}
+
+.surface {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-strong) 100%);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.surface::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(103, 166, 255, 0.5), rgba(63, 216, 194, 0.4), transparent);
+  pointer-events: none;
+}
+
+.app-header,
+.hero,
+.section-card,
+.info-note,
+.nav-card,
+.total-card,
+.empty-state {
+  border-radius: var(--radius-xl);
+}
+
+.app-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px;
+}
+
+.brand-copy h1 span {
+  filter: drop-shadow(0 6px 14px rgba(255, 215, 140, 0.2));
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+h1,
+h2,
+h3,
+h4,
+strong {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 0.98;
+}
+
+h2 {
+  font-size: clamp(1.45rem, 3.5vw, 2.1rem);
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+.subtitle,
+.hero-copy,
+.section-head p,
+.empty-state p,
+.nav-card p,
+.info-note p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.main-content {
+  margin-top: 20px;
+  min-width: 0;
+}
+
+.stack {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.hero,
+.hero-metrics,
+.card-grid,
+.report-grid,
+.field-grid,
+.metric,
+.section-card,
+.deposit-card,
+.history-card,
+.detail-card,
+.group-card,
+.deposit-source-item,
+.summary-grid,
+.summary-chip {
+  min-width: 0;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: panel-enter var(--motion-slow) var(--ease-smooth);
+}
+
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+  padding: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(103, 166, 255, 0.18), transparent 30%),
+    linear-gradient(180deg, var(--surface) 0%, var(--surface-strong) 100%);
+}
+
+.hero-metrics {
+  display: grid;
+  gap: 12px;
+}
+
+.metric {
+  display: grid;
+  gap: 4px;
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+}
+
+.metric span,
+.section-badge,
+.detail-meta,
+.summary-chip span,
+.chart-label {
+  color: var(--muted);
+}
+
+.metric strong {
+  font-size: 1.5rem;
+}
+
+.card-grid,
+.report-grid,
+.field-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+}
+
+#depositCards {
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+.report-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+.field-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+}
+
+.field-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+}
+
+.nav-card {
+  border: 0;
+  text-align: left;
+  padding: 20px;
+  transition: transform var(--motion-base) var(--ease-smooth), border-color var(--motion-fast) ease, box-shadow var(--motion-base) var(--ease-smooth), background var(--motion-base) ease;
+}
+
+.nav-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(103, 166, 255, 0.34);
+  box-shadow: 0 22px 38px rgba(0, 0, 0, 0.18);
+}
+
+.nav-card:active {
+  transform: translateY(0) scale(0.988);
+}
+
+.nav-card strong {
+  display: block;
+  margin: 18px 0 8px;
+  font-size: 1.15rem;
+}
+
+.nav-card-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(103, 166, 255, 0.14);
+  color: var(--primary-strong);
+}
+
+.info-note,
+.section-card,
+.total-card,
+.empty-state {
+  padding: 22px;
+}
+
+.info-note strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-head.compact {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(103, 166, 255, 0.1);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.field span {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-soft);
+  color: var(--text);
+  padding: 14px 15px;
+  transition: border-color var(--motion-fast) ease, transform var(--motion-base) var(--ease-smooth), background var(--motion-base) ease, box-shadow var(--motion-base) var(--ease-smooth);
+}
+
+.field input::placeholder {
+  color: var(--muted);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: rgba(103, 166, 255, 0.38);
+  box-shadow: 0 0 0 4px rgba(103, 166, 255, 0.08);
+}
+
+.field select:disabled {
+  opacity: 0.86;
+  cursor: not-allowed;
+}
+
+.total-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background:
+    linear-gradient(135deg, rgba(103, 166, 255, 0.22), transparent 48%),
+    linear-gradient(180deg, rgba(11, 20, 36, 0.9), rgba(18, 31, 53, 0.98));
+}
+
+body[data-theme="light"] .total-card {
+  background:
+    linear-gradient(135deg, rgba(15, 99, 255, 0.14), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 248, 255, 0.98));
+}
+
+.total-card span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.total-card strong {
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+}
+
+.total-card-month strong {
+  color: var(--primary-strong);
+}
+
+.total-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.total-inline strong {
+  font-size: 1.5rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button-row > * {
+  flex: 1 1 220px;
+}
+
+.btn {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: transform var(--motion-base) var(--ease-smooth), background var(--motion-base) ease, border-color var(--motion-fast) ease, color var(--motion-fast) ease, box-shadow var(--motion-base) var(--ease-smooth);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.btn.primary {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(15, 99, 255, 0.18);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 18px 34px rgba(15, 99, 255, 0.24);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+}
+
+.btn.ghost:hover {
+  background: rgba(103, 166, 255, 0.1);
+}
+
+.btn.danger {
+  background: rgba(255, 125, 148, 0.12);
+  color: var(--danger);
+  border-color: rgba(255, 125, 148, 0.28);
+}
+
+.btn.danger:hover {
+  background: rgba(255, 125, 148, 0.18);
+}
+
+.btn.small {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-size: 0.92rem;
+}
+
+.toast {
+  position: sticky;
+  top: 14px;
+  z-index: 20;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(8, 17, 32, 0.94);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+body[data-theme="light"] .toast {
+  background: rgba(19, 36, 68, 0.9);
+}
+
+.toast.success {
+  border-color: rgba(63, 216, 194, 0.28);
+}
+
+.toast.error {
+  border-color: rgba(255, 125, 148, 0.28);
+}
+
+.deposit-card {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--radius-xl);
+}
+
+.deposit-card .deposit-title {
+  display: grid;
+  gap: 4px;
+}
+
+.deposit-card .deposit-title span {
+  color: var(--muted);
+}
+
+.deposit-card > strong {
+  font-size: 1.9rem;
+}
+
+.deposit-highlight {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(63, 216, 194, 0.08);
+  border: 1px solid rgba(63, 216, 194, 0.18);
+}
+
+.deposit-highlight b {
+  font-size: 1.2rem;
+}
+
+.deposit-sources {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.deposit-sources-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.deposit-sources-list {
+  display: grid;
+  gap: 10px;
+}
+
+.deposit-source-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.deposit-source-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.deposit-source-copy strong {
+  font-size: 1rem;
+}
+
+.deposit-source-copy span,
+.deposit-source-copy small,
+.deposit-source-empty {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.deposit-source-empty {
+  margin: 0;
+}
+
+.history-card,
+.detail-card,
+.group-card,
+.day-row {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.history-card,
+.detail-card,
+.group-card {
+  padding: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.history-card {
+  padding: 14px;
+}
+
+.history-card .summary-grid {
+  margin-top: 14px;
+  gap: 10px;
+}
+
+.history-card .summary-chip {
+  padding: 10px 12px;
+}
+
+.history-card .summary-chip strong {
+  font-size: 0.94rem;
+}
+
+.history-card .history-actions {
+  margin-top: 14px;
+}
+
+.group-card,
+#dayDetail {
+  display: grid;
+  gap: 14px;
+}
+
+.history-header,
+.detail-header,
+.group-header,
+.summary-grid,
+.summary-chip,
+.day-row {
+  display: grid;
+  gap: 12px;
+}
+
+.history-header,
+.detail-header,
+.group-header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.history-meta,
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.92rem;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  margin-top: 18px;
+}
+
+.summary-chip {
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(103, 166, 255, 0.06);
+}
+
+.summary-chip strong {
+  font-size: 1rem;
+}
+
+.summary-chip.full {
+  grid-column: 1 / -1;
+}
+
+.history-actions,
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.chart-shell {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chart-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(18px, 1fr);
+  align-items: end;
+  gap: 10px;
+  min-width: 640px;
+  min-height: 240px;
+  padding: 16px 6px 2px;
+}
+
+.chart-bar {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.chart-column {
+  width: 100%;
+  min-height: 12px;
+  height: var(--bar-height);
+  border-radius: 14px 14px 6px 6px;
+  background: var(--bar-color);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.chart-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.day-row {
+  width: 100%;
+  padding: 16px;
+  text-align: left;
+  background: var(--surface-soft);
+  transition: border-color var(--motion-fast) ease, transform var(--motion-base) var(--ease-smooth), background var(--motion-base) ease, box-shadow var(--motion-base) var(--ease-smooth);
+}
+
+.day-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.12);
+}
+
+.day-row:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.day-row.active {
+  border-color: rgba(103, 166, 255, 0.4);
+  background: rgba(103, 166, 255, 0.12);
+}
+
+.day-row strong {
+  font-size: 1rem;
+}
+
+.day-row span {
+  color: var(--muted);
+}
+
+.day-row small {
+  color: var(--primary-strong);
+  font-weight: 700;
+}
+
+.empty-state {
+  text-align: center;
+}
+
+.empty-state strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.06rem;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  width: min(1100px, calc(100% - 24px));
+  padding: 10px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(10, 19, 35, 0.88), rgba(16, 29, 52, 0.96));
+}
+
+body[data-theme="light"] .bottom-nav {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 248, 255, 0.98));
+}
+
+.nav-button {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  align-content: center;
+  min-height: 64px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--muted);
+  transition: background var(--motion-base) ease, transform var(--motion-base) var(--ease-smooth), color var(--motion-fast) ease, box-shadow var(--motion-base) var(--ease-smooth);
+}
+
+.nav-button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(103, 166, 255, 0.1);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.nav-button strong {
+  font-size: 0.84rem;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  background: rgba(103, 166, 255, 0.08);
+}
+
+.nav-button:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.nav-button.active {
+  background: rgba(103, 166, 255, 0.16);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 24px rgba(0, 0, 0, 0.14);
+}
+
+.nav-button.active span {
+  background: rgba(103, 166, 255, 0.22);
+  color: var(--primary-strong);
+}
+
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header,
+  .section-head,
+  .history-header,
+  .detail-header,
+  .group-header,
+  .deposit-highlight,
+  .deposit-source-item {
+    grid-template-columns: 1fr;
+    display: grid;
+    align-items: stretch;
+  }
+
+  .app-header {
+    padding: 20px;
+  }
+
+  .chart-grid {
+    min-width: max(100%, 560px);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    width: min(100%, calc(100% - 18px));
+    padding-top: 12px;
+    padding-bottom: 126px;
+  }
+
+  .card-grid,
+  .field-grid-3,
+  .field-grid-4,
+  .summary-grid,
+  .report-grid,
+  #depositCards {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-nav {
+    width: calc(100% - 16px);
+    bottom: 8px;
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .nav-button {
+    min-height: 60px;
+    padding: 6px 4px;
+  }
+
+  .nav-button strong {
+    font-size: 0.72rem;
+  }
+
+  .chart-grid {
+    min-width: max(100%, 480px);
+    gap: 8px;
+  }
+
+  .total-card,
+  .total-inline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .button-row > * {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-shell {
+    width: calc(100% - 14px);
+    padding-bottom: 132px;
+  }
+
+  .app-header,
+  .hero,
+  .section-card,
+  .info-note,
+  .total-card,
+  .empty-state,
+  .deposit-card {
+    padding: 18px;
+  }
+
+  .bottom-nav {
+    border-radius: 20px;
+  }
+
+  .nav-button strong {
+    font-size: 0.68rem;
+  }
+
+  .nav-button span {
+    min-width: 30px;
+    min-height: 26px;
+    font-size: 0.68rem;
+  }
+
+  .deposit-source-item,
+  .history-card,
+  .detail-card,
+  .group-card,
+  .day-row {
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+  </style>
+  <script>
+
+(() => {
+  const STORAGE_KEY = "igreja_finance_entries_v3";
+  const THEME_KEY = "sagrado_theme_v1";
+  const DAY_NAMES = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+  const MOVEMENT_FIELDS = ["deposito", "dp", "app", "debito", "credito", "boletos"];
+  const INFO_FIELDS = ["folha", "ofEbi", "jornal", "ofFju", "biblia", "literatura", "cracha"];
+  const MEETING_FIELDS = ["h08", "h10", "h12", "h15", "h19", "h1930"];
+  const MONTH_NAMES = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+  ];
+
+  const state = {
+    entries: loadEntries(),
+    editingId: null,
+    activeTab: "inicio",
+    historyFilters: { igreja: "", data: "" },
+    report: {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      selectedDay: ""
+    },
+    theme: loadTheme()
+  };
+
+  const ui = {};
+  let toastTimer = null;
+
+  document.addEventListener("DOMContentLoaded", init);
+
+  function init() {
+    cacheUi();
+    bindEvents();
+    applyTheme(state.theme);
+    initializeSelectors();
+    resetLaunchForm();
+    switchTab("inicio");
+    refreshAll();
+  }
+
+  function cacheUi() {
+    ui.body = document.body;
+    ui.themeToggle = document.getElementById("themeToggle");
+    ui.toast = document.getElementById("toast");
+    ui.tabButtons = Array.from(document.querySelectorAll("[data-tab-btn]"));
+    ui.tabPanels = Array.from(document.querySelectorAll(".tab-panel"));
+    ui.homeTabCards = Array.from(document.querySelectorAll("[data-go-tab]"));
+    ui.homeMonthTotal = document.getElementById("homeMonthTotal");
+
+    ui.launchSectionTitle = document.getElementById("launchSectionTitle");
+    ui.launchModeBadge = document.getElementById("launchModeBadge");
+    ui.launchForm = document.getElementById("launchForm");
+    ui.dataInput = document.getElementById("dataInput");
+    ui.diaSemanaInput = document.getElementById("diaSemanaInput");
+    ui.totalDayValue = document.getElementById("totalDayValue");
+    ui.meetingTotalValue = document.getElementById("meetingTotalValue");
+    ui.saveLaunchButton = document.getElementById("saveLaunchButton");
+    ui.clearLaunchButton = document.getElementById("clearLaunchButton");
+    ui.deleteAllButton = document.getElementById("deleteAllButton");
+
+    ui.depositReferenceLabel = document.getElementById("depositReferenceLabel");
+    ui.depositCards = document.getElementById("depositCards");
+
+    ui.historyChurchFilter = document.getElementById("historyChurchFilter");
+    ui.historyDateFilter = document.getElementById("historyDateFilter");
+    ui.applyHistoryFilterButton = document.getElementById("applyHistoryFilterButton");
+    ui.clearHistoryFilterButton = document.getElementById("clearHistoryFilterButton");
+    ui.historyCountBadge = document.getElementById("historyCountBadge");
+    ui.historyList = document.getElementById("historyList");
+    ui.historyEmpty = document.getElementById("historyEmpty");
+
+    ui.reportYearSelect = document.getElementById("reportYearSelect");
+    ui.reportMonthSelect = document.getElementById("reportMonthSelect");
+    ui.updateReportButton = document.getElementById("updateReportButton");
+    ui.reportRangeBadge = document.getElementById("reportRangeBadge");
+    ui.monthTotalValue = document.getElementById("monthTotalValue");
+    ui.dailyChart = document.getElementById("dailyChart");
+    ui.monthDaysList = document.getElementById("monthDaysList");
+    ui.monthDaysEmpty = document.getElementById("monthDaysEmpty");
+    ui.dayDetail = document.getElementById("dayDetail");
+  }
+
+  function bindEvents() {
+    ui.themeToggle.addEventListener("click", toggleTheme);
+
+    ui.tabButtons.forEach((button) => {
+      button.addEventListener("click", () => switchTab(button.dataset.tabBtn));
+    });
+
+    ui.homeTabCards.forEach((button) => {
+      button.addEventListener("click", () => switchTab(button.dataset.goTab));
+    });
+
+    ui.dataInput.addEventListener("change", updateWeekdayField);
+
+    Array.from(ui.launchForm.querySelectorAll('input[type="number"]')).forEach((input) => {
+      input.addEventListener("input", updateComputedBlocks);
+    });
+
+    ui.launchForm.addEventListener("submit", handleLaunchSubmit);
+    ui.clearLaunchButton.addEventListener("click", () => {
+      resetLaunchForm({ presetToday: false });
+      announce("Formulário limpo.", "success");
+    });
+    ui.deleteAllButton.addEventListener("click", deleteAllEntries);
+
+    ui.applyHistoryFilterButton.addEventListener("click", applyHistoryFilters);
+    ui.clearHistoryFilterButton.addEventListener("click", clearHistoryFilters);
+    ui.historyList.addEventListener("click", handleListActions);
+    ui.depositCards.addEventListener("click", handleListActions);
+
+    ui.updateReportButton.addEventListener("click", updateReportSelection);
+    ui.monthDaysList.addEventListener("click", handleDaySelection);
+    ui.dayDetail.addEventListener("click", handleListActions);
+  }
+
+  function initializeSelectors() {
+    ui.reportMonthSelect.innerHTML = MONTH_NAMES.map((month, index) => {
+      return '<option value="' + String(index + 1) + '">' + month + "</option>";
+    }).join("");
+    ui.reportMonthSelect.value = String(state.report.month);
+    populateYearOptions();
+  }
+
+  function toggleTheme() {
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    saveTheme(state.theme);
+    applyTheme(state.theme);
+    renderReports();
+    announce("Tema " + (state.theme === "dark" ? "escuro" : "claro") + " ativado.", "success");
+  }
+
+  function applyTheme(theme) {
+    ui.body.dataset.theme = theme;
+    ui.themeToggle.textContent = "Tema: " + (theme === "dark" ? "escuro" : "claro");
+  }
+
+  function switchTab(tabName) {
+    const validTabs = ["inicio", "lancamento", "deposito", "historico", "total"];
+    state.activeTab = validTabs.includes(tabName) ? tabName : "inicio";
+    ui.tabButtons.forEach((button) => {
+      button.classList.toggle("active", button.dataset.tabBtn === state.activeTab);
+    });
+    ui.tabPanels.forEach((panel) => {
+      panel.classList.toggle("active", panel.dataset.tab === state.activeTab);
+    });
+  }
+
+  function refreshAll() {
+    state.entries = sortEntries(state.entries);
+    populateYearOptions();
+    updateChurchFilterOptions();
+    updateComputedBlocks();
+    renderHome();
+    renderDeposit();
+    renderHistory();
+    renderReports();
+  }
+
+  function renderHome() {
+    const today = new Date();
+    const currentMonthEntries = getEntriesByMonth(today.getFullYear(), today.getMonth() + 1);
+    ui.homeMonthTotal.textContent = formatBRL(sumEntries(currentMonthEntries));
+  }
+
+  function updateWeekdayField() {
+    ui.diaSemanaInput.value = weekdayPt(ui.dataInput.value);
+  }
+
+  function updateComputedBlocks() {
+    ui.totalDayValue.textContent = formatBRL(calculateCurrentFormTotal());
+    ui.meetingTotalValue.textContent = formatBRL(calculateCurrentMeetingsTotal());
+    updateWeekdayField();
+  }
+
+  function calculateCurrentFormTotal() {
+    return calculateCurrentMovementTotal() + calculateCurrentMeetingsTotal();
+  }
+
+  function calculateCurrentMovementTotal() {
+    return MOVEMENT_FIELDS.reduce((total, field) => {
+      return total + toNumber(ui.launchForm.elements[field].value);
+    }, 0);
+  }
+
+  function calculateCurrentMeetingsTotal() {
+    return MEETING_FIELDS.reduce((total, field) => {
+      return total + toNumber(ui.launchForm.elements[field].value);
+    }, 0);
+  }
+
+  function handleLaunchSubmit(event) {
+    event.preventDefault();
+    if (!ui.launchForm.reportValidity()) {
+      announce("Preencha os campos obrigatórios antes de salvar.", "error");
+      return;
+    }
+
+    const payload = collectFormPayload();
+    const existing = state.editingId ? findEntryById(state.editingId) : null;
+    const nextEntry = normalizeEntry({
+      id: existing ? existing.id : generateId(),
+      igreja: payload.igreja,
+      data: payload.data,
+      diaSemana: payload.diaSemana,
+      deposito: payload.deposito,
+      dp: payload.dp,
+      app: payload.app,
+      debito: payload.debito,
+      credito: payload.credito,
+      boletos: payload.boletos,
+      informativo: payload.informativo,
+      reunioes: payload.reunioes,
+      totalDay: payload.totalDay,
+      createdAt: existing ? existing.createdAt : new Date().toISOString()
+    });
+
+    if (existing) {
+      state.entries = state.entries.map((entry) => entry.id === existing.id ? nextEntry : entry);
+      announce("Lançamento atualizado com sucesso.", "success");
+    } else {
+      state.entries = [nextEntry].concat(state.entries);
+      announce("Lançamento salvo com sucesso.", "success");
+    }
+
+    persistEntries();
+    refreshAll();
+    resetLaunchForm();
+  }
+
+  function collectFormPayload() {
+    const igreja = String(ui.launchForm.elements.igreja.value || "").trim();
+    const data = ui.launchForm.elements.data.value;
+    const diaSemana = weekdayPt(data);
+
+    const informativo = {};
+    INFO_FIELDS.forEach((field) => {
+      informativo[field] = toNumber(ui.launchForm.elements[field].value);
+    });
+
+    const reunioes = {};
+    MEETING_FIELDS.forEach((field) => {
+      reunioes[field] = toNumber(ui.launchForm.elements[field].value);
+    });
+
+    const movementValues = {};
+    MOVEMENT_FIELDS.forEach((field) => {
+      movementValues[field] = toNumber(ui.launchForm.elements[field].value);
+    });
+
+    return {
+      igreja,
+      data,
+      diaSemana,
+      deposito: movementValues.deposito,
+      dp: movementValues.dp,
+      app: movementValues.app,
+      debito: movementValues.debito,
+      credito: movementValues.credito,
+      boletos: movementValues.boletos,
+      informativo,
+      reunioes,
+      totalDay: calculateMovementTotal(movementValues) + calculateMeetingsTotal(reunioes)
+    };
+  }
+
+  function resetLaunchForm(options = {}) {
+    const presetToday = options.presetToday !== false;
+    state.editingId = null;
+    ui.launchForm.reset();
+    ui.dataInput.value = presetToday ? todayISO() : "";
+    updateLaunchUiMode();
+    updateComputedBlocks();
+  }
+
+  function updateLaunchUiMode() {
+    const editing = Boolean(state.editingId);
+    ui.launchSectionTitle.textContent = editing ? "Editar lançamento" : "Novo lançamento";
+    ui.launchModeBadge.textContent = editing ? "Modo edição" : "Modo cadastro";
+    ui.saveLaunchButton.textContent = editing ? "Salvar Alterações" : "Salvar Dia";
+  }
+
+  function beginEdit(entryId) {
+    const entry = findEntryById(entryId);
+    if (!entry) {
+      announce("Lançamento não encontrado para edição.", "error");
+      return;
+    }
+
+    state.editingId = entry.id;
+    ui.launchForm.elements.igreja.value = entry.igreja;
+    ui.launchForm.elements.data.value = entry.data;
+    ui.launchForm.elements.diaSemana.value = entry.diaSemana;
+
+    MOVEMENT_FIELDS.forEach((field) => {
+      ui.launchForm.elements[field].value = entry[field] ? String(entry[field]) : "";
+    });
+
+    INFO_FIELDS.forEach((field) => {
+      ui.launchForm.elements[field].value = entry.informativo[field] ? String(entry.informativo[field]) : "";
+    });
+
+    MEETING_FIELDS.forEach((field) => {
+      ui.launchForm.elements[field].value = entry.reunioes[field] ? String(entry.reunioes[field]) : "";
+    });
+
+    updateLaunchUiMode();
+    updateComputedBlocks();
+    switchTab("lancamento");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function deleteAllEntries() {
+    if (!state.entries.length) {
+      announce("Não há lançamentos para excluir.", "error");
+      return;
+    }
+
+    if (!window.confirm("Deseja realmente excluir todos os lançamentos salvos?")) {
+      return;
+    }
+
+    state.entries = [];
+    persistEntries();
+    clearHistoryFilters({ silent: true });
+    state.report.selectedDay = "";
+    refreshAll();
+    resetLaunchForm();
+    announce("Todos os lançamentos foram excluídos.", "success");
+  }
+
+  function updateChurchFilterOptions() {
+    const currentValue = state.historyFilters.igreja;
+    const churches = Array.from(new Set(state.entries.map((entry) => entry.igreja).filter(Boolean)))
+      .sort((left, right) => left.localeCompare(right, "pt-BR", { sensitivity: "base" }));
+
+    ui.historyChurchFilter.innerHTML = '<option value="">Todas as Igrejas</option>' + churches.map((church) => {
+      return '<option value="' + escapeHtml(church) + '">' + escapeHtml(church) + "</option>";
+    }).join("");
+
+    if (churches.includes(currentValue)) {
+      ui.historyChurchFilter.value = currentValue;
+    } else {
+      state.historyFilters.igreja = "";
+      ui.historyChurchFilter.value = "";
+    }
+
+    ui.historyDateFilter.value = state.historyFilters.data;
+  }
+
+  function applyHistoryFilters() {
+    state.historyFilters = {
+      igreja: ui.historyChurchFilter.value,
+      data: ui.historyDateFilter.value
+    };
+    renderHistory();
+  }
+
+  function clearHistoryFilters(options = {}) {
+    state.historyFilters = { igreja: "", data: "" };
+    ui.historyChurchFilter.value = "";
+    ui.historyDateFilter.value = "";
+    renderHistory();
+    if (!options.silent) {
+      announce("Filtros do histórico limpos.", "success");
+    }
+  }
+  function getFilteredHistoryEntries() {
+    return state.entries.filter((entry) => {
+      const matchesChurch = !state.historyFilters.igreja || entry.igreja === state.historyFilters.igreja;
+      const matchesDate = !state.historyFilters.data || entry.data === state.historyFilters.data;
+      return matchesChurch && matchesDate;
+    });
+  }
+
+  function renderHistory() {
+    const filtered = getFilteredHistoryEntries();
+    ui.historyCountBadge.textContent = countLabel(filtered.length, "item", "itens");
+    ui.historyList.innerHTML = filtered.map(renderHistoryCard).join("");
+    ui.historyEmpty.classList.toggle("hidden", filtered.length > 0);
+  }
+
+  function renderHistoryCard(entry) {
+    return [
+      '<article class="history-card">',
+      '  <div class="history-header">',
+      '    <div>',
+      '      <h3>' + escapeHtml(entry.igreja) + '</h3>',
+      '      <div class="history-meta">',
+      '        <span>' + escapeHtml(entry.diaSemana) + '</span>',
+      '        <span>' + escapeHtml(formatDate(entry.data)) + '</span>',
+      '      </div>',
+      '    </div>',
+      '    <strong>' + escapeHtml(formatBRL(entry.totalDay)) + '</strong>',
+      '  </div>',
+      '  <div class="summary-grid">',
+      renderSummaryChip("Depósito", entry.deposito),
+      renderSummaryChip("DP", entry.dp),
+      renderSummaryChip("App", entry.app),
+      renderSummaryChip("Débito", entry.debito),
+      renderSummaryChip("Crédito", entry.credito),
+      renderSummaryChip("Boletos", entry.boletos),
+      renderSummaryChip("Reuniões", calculateMeetingsTotal(entry.reunioes)),
+      '  </div>',
+      '  <div class="history-actions">',
+      '    <button type="button" class="btn small primary" data-action="edit" data-id="' + escapeHtml(entry.id) + '">Editar</button>',
+      '    <button type="button" class="btn small danger" data-action="delete" data-id="' + escapeHtml(entry.id) + '">Excluir</button>',
+      '  </div>',
+      '</article>'
+    ].join("");
+  }
+
+  function renderSummaryChip(label, value) {
+    return '<div class="summary-chip"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(formatBRL(value)) + '</strong></div>';
+  }
+
+  function handleListActions(event) {
+    const target = event.target.closest("[data-action]");
+    if (!target) return;
+
+    const entryId = target.dataset.id;
+    const action = target.dataset.action;
+
+    if (action === "edit") {
+      beginEdit(entryId);
+      return;
+    }
+
+    if (action === "delete") {
+      deleteEntry(entryId);
+    }
+  }
+
+  function deleteEntry(entryId) {
+    const entry = findEntryById(entryId);
+    if (!entry) {
+      announce("Lançamento não encontrado para exclusão.", "error");
+      return;
+    }
+
+    if (!window.confirm("Deseja excluir este lançamento?")) {
+      return;
+    }
+
+    state.entries = state.entries.filter((item) => item.id !== entryId);
+    if (state.editingId === entryId) {
+      resetLaunchForm();
+    }
+    persistEntries();
+    refreshAll();
+    announce("Lançamento excluído com sucesso.", "success");
+  }
+
+  function renderDeposit() {
+    const today = startOfDay(new Date());
+    const weekStart = getWeekStart(today);
+    const todayDay = today.getDay();
+    const cards = [];
+
+    ui.depositReferenceLabel.textContent = "Hoje: " + formatDate(todayISO(today));
+
+    if ([1, 2, 3, 4].includes(todayDay)) {
+      const monday = weekStart;
+      const wednesday = addDays(monday, 2);
+      const sources = getEntriesInRange(monday, wednesday).filter((entry) => getEntryDepositTotal(entry) > 0);
+      const total = sumEntriesForDeposit(sources);
+      cards.push(renderDepositCard({
+        title: "Total Provisionado (Segunda a Quarta)",
+        subtitle: rangeLabel(monday, wednesday),
+        total,
+        highlightLabel: "Depósito Quinta-Feira",
+        highlightValue: total,
+        sources
+      }));
+    }
+
+    if ([4, 5, 6, 0, 1].includes(todayDay)) {
+      const anchor = todayDay === 1 ? addDays(today, -7) : today;
+      const thursday = addDays(getWeekStart(anchor), 3);
+      const sunday = addDays(getWeekStart(anchor), 6);
+      const sources = getEntriesInRange(thursday, sunday).filter((entry) => getEntryDepositTotal(entry) > 0);
+      const total = sumEntriesForDeposit(sources);
+      cards.push(renderDepositCard({
+        title: "Total Provisionado (Quinta a Domingo)",
+        subtitle: rangeLabel(thursday, sunday),
+        total,
+        highlightLabel: "Depósito Segunda-Feira",
+        highlightValue: total,
+        sources
+      }));
+    }
+
+    ui.depositCards.innerHTML = cards.join("");
+
+    if (!cards.length) {
+      ui.depositCards.innerHTML = [
+        '<article class="empty-state surface">',
+        '  <strong>Nenhum cálculo disponível.</strong>',
+        '  <p>Os cartões inteligentes aparecem automaticamente conforme o dia da semana atual.</p>',
+        '</article>'
+      ].join("");
+    }
+  }
+
+  function renderDepositCard(config) {
+    return [
+      '<article class="deposit-card surface">',
+      '  <div class="deposit-title">',
+      '    <h3>' + escapeHtml(config.title) + '</h3>',
+      '    <span>' + escapeHtml(config.subtitle) + '</span>',
+      '  </div>',
+      '  <strong>' + escapeHtml(formatBRL(config.total)) + '</strong>',
+      '  <div class="deposit-highlight">',
+      '    <span>' + escapeHtml(config.highlightLabel) + '</span>',
+      '    <b>' + escapeHtml(formatBRL(config.highlightValue)) + '</b>',
+      '  </div>',
+      '  <div class="deposit-sources">',
+      '    <span class="deposit-sources-label">Valores vindos de:</span>',
+      '    <div class="deposit-sources-list">',
+      config.sources.length
+        ? config.sources.map(renderDepositSourceItem).join("")
+        : '      <p class="deposit-source-empty">Nenhum lançamento com Depósito ou DP Provisionado nesta janela.</p>',
+      '    </div>',
+      '  </div>',
+      '</article>'
+    ].join("");
+  }
+
+  function renderDepositSourceItem(entry) {
+    return [
+      '<div class="deposit-source-item">',
+      '  <div class="deposit-source-copy">',
+      '    <strong>' + escapeHtml(entry.igreja) + '</strong>',
+      '    <span>' + escapeHtml(formatDate(entry.data) + ' • ' + entry.diaSemana) + '</span>',
+      '    <small>Depósito ' + escapeHtml(formatBRL(entry.deposito)) + ' • DP ' + escapeHtml(formatBRL(entry.dp)) + ' • Fonte ' + escapeHtml(formatBRL(getEntryDepositTotal(entry))) + '</small>',
+      '  </div>',
+      '  <button type="button" class="btn small ghost" data-action="edit" data-id="' + escapeHtml(entry.id) + '">Editar</button>',
+      '</div>'
+    ].join("");
+  }
+
+  function updateReportSelection() {
+    state.report.year = Number(ui.reportYearSelect.value) || new Date().getFullYear();
+    state.report.month = Number(ui.reportMonthSelect.value) || (new Date().getMonth() + 1);
+    state.report.selectedDay = "";
+    renderReports();
+  }
+
+  function populateYearOptions() {
+    const currentYear = new Date().getFullYear();
+    const years = Array.from(new Set(state.entries.map((entry) => getDateParts(entry.data).year).concat(currentYear)))
+      .filter((year) => Number.isInteger(year))
+      .sort((left, right) => right - left);
+
+    if (!years.includes(state.report.year)) {
+      state.report.year = currentYear;
+    }
+
+    ui.reportYearSelect.innerHTML = years.map((year) => {
+      return '<option value="' + String(year) + '">' + String(year) + '</option>';
+    }).join("");
+
+    ui.reportYearSelect.value = String(state.report.year);
+    ui.reportMonthSelect.value = String(state.report.month);
+  }
+
+  function renderReports() {
+    const monthEntries = getEntriesByMonth(state.report.year, state.report.month);
+    const groupedDays = groupEntriesByDate(monthEntries);
+    const selectedGroup = groupedDays.find((group) => group.date === state.report.selectedDay);
+
+    if (!selectedGroup) {
+      state.report.selectedDay = groupedDays.length ? groupedDays[0].date : "";
+    }
+
+    const monthTotal = sumEntries(monthEntries);
+    ui.reportRangeBadge.textContent = MONTH_NAMES[state.report.month - 1] + " de " + String(state.report.year);
+    ui.monthTotalValue.textContent = formatBRL(monthTotal);
+
+    renderDailyChart(monthEntries, state.report.year, state.report.month);
+    renderMonthDays(groupedDays);
+    renderDayDetail(groupedDays.find((group) => group.date === state.report.selectedDay) || null);
+  }
+
+  function renderDailyChart(entries, year, month) {
+    const dayTotals = new Map();
+    entries.forEach((entry) => {
+      const day = getDateParts(entry.data).day;
+      dayTotals.set(day, (dayTotals.get(day) || 0) + entry.totalDay);
+    });
+
+    const totalDays = daysInMonth(year, month);
+    const values = [];
+    for (let day = 1; day <= totalDays; day += 1) {
+      values.push(dayTotals.get(day) || 0);
+    }
+
+    const maxValue = Math.max(...values, 0);
+    const neutralColor = state.theme === "dark" ? "rgba(149, 166, 199, 0.26)" : "rgba(90, 106, 134, 0.18)";
+    const activeColor = state.theme === "dark"
+      ? "linear-gradient(180deg, rgba(63, 216, 194, 0.95), rgba(103, 166, 255, 0.96))"
+      : "linear-gradient(180deg, rgba(15, 99, 255, 0.95), rgba(5, 140, 139, 0.92))";
+
+    ui.dailyChart.innerHTML = values.map((value, index) => {
+      const day = index + 1;
+      const ratio = maxValue > 0 ? value / maxValue : 0;
+      const height = value > 0 ? Math.max(18, Math.round(ratio * 180) + 24) : 16;
+      const isoDate = toIsoDate(year, month, day);
+      return [
+        '<div class="chart-bar" title="' + escapeHtml(formatDate(isoDate) + ' • ' + formatBRL(value)) + '">',
+        '  <div class="chart-column" style="--bar-height:' + String(height) + 'px;--bar-color:' + activeOrNeutral(value, activeColor, neutralColor) + ';"></div>',
+        '  <span class="chart-label">' + String(day) + '</span>',
+        '</div>'
+      ].join("");
+    }).join("");
+  }
+
+  function activeOrNeutral(value, activeColor, neutralColor) {
+    return value > 0 ? activeColor : neutralColor;
+  }
+  function renderMonthDays(groupedDays) {
+    if (!groupedDays.length) {
+      ui.monthDaysList.innerHTML = "";
+      ui.monthDaysEmpty.classList.remove("hidden");
+      return;
+    }
+
+    ui.monthDaysEmpty.classList.add("hidden");
+    ui.monthDaysList.innerHTML = groupedDays.map((group) => {
+      const isActive = group.date === state.report.selectedDay;
+      return [
+        '<button type="button" class="day-row' + (isActive ? ' active' : '') + '" data-day="' + escapeHtml(group.date) + '">',
+        '  <strong>' + escapeHtml(formatDate(group.date)) + '</strong>',
+        '  <span>' + escapeHtml(countLabel(group.entries.length, 'lançamento', 'lançamentos')) + '</span>',
+        '  <small>' + escapeHtml(formatBRL(group.total)) + '</small>',
+        '</button>'
+      ].join("");
+    }).join("");
+  }
+
+  function handleDaySelection(event) {
+    const target = event.target.closest("[data-day]");
+    if (!target) return;
+    state.report.selectedDay = target.dataset.day;
+    renderReports();
+  }
+
+  function renderDayDetail(group) {
+    if (!group) {
+      ui.dayDetail.innerHTML = [
+        '<div class="empty-state">',
+        '  <strong>Selecione um dia com lançamentos.</strong>',
+        '  <p>O resumo completo do dia aparecerá aqui.</p>',
+        '</div>'
+      ].join("");
+      return;
+    }
+
+    if (group.entries.length === 1) {
+      ui.dayDetail.innerHTML = renderSingleDayDetail(group.entries[0]);
+      return;
+    }
+
+    ui.dayDetail.innerHTML = renderGroupedDayDetail(group);
+  }
+
+  function renderSingleDayDetail(entry) {
+    return [
+      '<article class="detail-card">',
+      '  <div class="detail-header">',
+      '    <div>',
+      '      <h3>' + escapeHtml(formatDate(entry.data)) + '</h3>',
+      '      <div class="detail-meta">',
+      '        <span>' + escapeHtml(entry.diaSemana) + '</span>',
+      '        <span>' + escapeHtml(entry.igreja) + '</span>',
+      '      </div>',
+      '    </div>',
+      '    <strong>' + escapeHtml(formatBRL(entry.totalDay)) + '</strong>',
+      '  </div>',
+      '  <div class="summary-grid">',
+      renderSummaryChip("Depósito", entry.deposito),
+      renderSummaryChip("DP", entry.dp),
+      renderSummaryChip("App", entry.app),
+      renderSummaryChip("Débito", entry.debito),
+      renderSummaryChip("Crédito", entry.credito),
+      renderSummaryChip("Boletos", entry.boletos),
+      renderSummaryChip("Reuniões", calculateMeetingsTotal(entry.reunioes)),
+      '    <div class="summary-chip full"><span>Total do Dia</span><strong>' + escapeHtml(formatBRL(entry.totalDay)) + '</strong></div>',
+      '  </div>',
+      '  <div class="detail-actions">',
+      '    <button type="button" class="btn small primary" data-action="edit" data-id="' + escapeHtml(entry.id) + '">Editar este dia</button>',
+      '    <button type="button" class="btn small danger" data-action="delete" data-id="' + escapeHtml(entry.id) + '">Excluir</button>',
+      '  </div>',
+      '</article>'
+    ].join("");
+  }
+
+  function renderGroupedDayDetail(group) {
+    return [
+      '<article class="group-card">',
+      '  <div class="group-header">',
+      '    <div>',
+      '      <h3>' + escapeHtml(formatDate(group.date)) + '</h3>',
+      '      <div class="detail-meta">',
+      '        <span>' + escapeHtml(countLabel(group.entries.length, 'lançamento', 'lançamentos')) + '</span>',
+      '        <span>Total somado do dia</span>',
+      '      </div>',
+      '    </div>',
+      '    <strong>' + escapeHtml(formatBRL(group.total)) + '</strong>',
+      '  </div>',
+      group.entries.map((entry) => {
+        return [
+          '<article class="detail-card">',
+          '  <div class="detail-header">',
+          '    <div>',
+          '      <h4>' + escapeHtml(entry.igreja) + '</h4>',
+          '      <div class="detail-meta">',
+          '        <span>' + escapeHtml(entry.diaSemana) + '</span>',
+          '        <span>' + escapeHtml(formatDate(entry.data)) + '</span>',
+          '      </div>',
+          '    </div>',
+          '    <strong>' + escapeHtml(formatBRL(entry.totalDay)) + '</strong>',
+          '  </div>',
+          '  <div class="detail-actions">',
+          '    <button type="button" class="btn small primary" data-action="edit" data-id="' + escapeHtml(entry.id) + '">Editar</button>',
+          '    <button type="button" class="btn small danger" data-action="delete" data-id="' + escapeHtml(entry.id) + '">Excluir</button>',
+          '  </div>',
+          '</article>'
+        ].join("");
+      }).join(""),
+      '</article>'
+    ].join("");
+  }
+
+  function persistEntries() {
+    state.entries = sortEntries(state.entries);
+    saveEntries(state.entries);
+  }
+
+  function loadEntries() {
+    return sortEntries(safeParseEntries(window.localStorage.getItem(STORAGE_KEY)));
+  }
+
+  function saveEntries(entries) {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sortEntries(entries)));
+  }
+
+  function safeParseEntries(raw) {
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.map(normalizeEntry);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function normalizeEntry(entry) {
+    const normalized = entry && typeof entry === "object" ? entry : {};
+    const informativo = normalized.informativo && typeof normalized.informativo === "object" ? normalized.informativo : {};
+    const reunioes = normalized.reunioes && typeof normalized.reunioes === "object" ? normalized.reunioes : {};
+    const data = isValidIsoDate(normalized.data) ? normalized.data : todayISO();
+    const movementValues = {
+      deposito: toNumber(normalized.deposito),
+      dp: toNumber(normalized.dp),
+      app: toNumber(normalized.app),
+      debito: toNumber(normalized.debito),
+      credito: toNumber(normalized.credito),
+      boletos: toNumber(normalized.boletos)
+    };
+
+    return {
+      id: normalized.id ? String(normalized.id) : generateId(),
+      igreja: String(normalized.igreja || "").trim(),
+      data,
+      diaSemana: weekdayPt(data),
+      deposito: movementValues.deposito,
+      dp: movementValues.dp,
+      app: movementValues.app,
+      debito: movementValues.debito,
+      credito: movementValues.credito,
+      boletos: movementValues.boletos,
+      informativo: {
+        folha: toNumber(informativo.folha),
+        ofEbi: toNumber(informativo.ofEbi),
+        jornal: toNumber(informativo.jornal),
+        ofFju: toNumber(informativo.ofFju),
+        biblia: toNumber(informativo.biblia),
+        literatura: toNumber(informativo.literatura),
+        cracha: toNumber(informativo.cracha)
+      },
+      reunioes: {
+        h08: toNumber(reunioes.h08),
+        h10: toNumber(reunioes.h10),
+        h12: toNumber(reunioes.h12),
+        h15: toNumber(reunioes.h15),
+        h19: toNumber(reunioes.h19),
+        h1930: toNumber(reunioes.h1930)
+      },
+      totalDay: calculateMovementTotal(movementValues) + calculateMeetingsTotal(reunioes),
+      createdAt: normalized.createdAt || new Date().toISOString()
+    };
+  }
+
+  function loadTheme() {
+    return window.localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark";
+  }
+
+  function saveTheme(theme) {
+    window.localStorage.setItem(THEME_KEY, theme);
+  }
+
+  function formatBRL(value) {
+    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(toNumber(value));
+  }
+
+  function todayISO(date = new Date()) {
+    const current = startOfDay(date);
+    return toIsoDate(current.getFullYear(), current.getMonth() + 1, current.getDate());
+  }
+
+  function toNumber(value) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function weekdayPt(value) {
+    const date = value instanceof Date ? startOfDay(value) : parseIsoDate(value);
+    return date ? DAY_NAMES[date.getDay()] : "";
+  }
+
+  function formatDate(isoDate) {
+    const date = parseIsoDate(isoDate);
+    return date
+      ? new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date)
+      : "--";
+  }
+  function parseIsoDate(value) {
+    if (!isValidIsoDate(value)) return null;
+    const parts = value.split("-").map((part) => Number(part));
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+
+  function isValidIsoDate(value) {
+    return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
+  }
+
+  function calculateMovementTotal(values) {
+    return MOVEMENT_FIELDS.reduce((total, field) => total + toNumber(values[field]), 0);
+  }
+
+  function calculateMeetingsTotal(values) {
+    return MEETING_FIELDS.reduce((total, field) => total + toNumber(values[field]), 0);
+  }
+
+  function findEntryById(entryId) {
+    return state.entries.find((entry) => entry.id === entryId) || null;
+  }
+
+  function sortEntries(entries) {
+    return entries.slice().sort((left, right) => {
+      if (left.data !== right.data) {
+        return left.data < right.data ? 1 : -1;
+      }
+      const leftCreated = Date.parse(left.createdAt) || 0;
+      const rightCreated = Date.parse(right.createdAt) || 0;
+      return rightCreated - leftCreated;
+    });
+  }
+
+  function countLabel(value, singular, plural) {
+    return String(value) + " " + (value === 1 ? singular : plural);
+  }
+
+  function sumEntries(entries) {
+    return entries.reduce((total, entry) => total + toNumber(entry.totalDay), 0);
+  }
+
+  function sumEntriesForDeposit(entries) {
+    return entries.reduce((total, entry) => total + getEntryDepositTotal(entry), 0);
+  }
+
+  function getEntryDepositTotal(entry) {
+    return toNumber(entry.deposito) + toNumber(entry.dp);
+  }
+
+  function getEntriesByMonth(year, month) {
+    return state.entries.filter((entry) => {
+      const parts = getDateParts(entry.data);
+      return parts.year === year && parts.month === month;
+    });
+  }
+
+  function groupEntriesByDate(entries) {
+    const groups = new Map();
+    entries.forEach((entry) => {
+      const current = groups.get(entry.data) || [];
+      current.push(entry);
+      groups.set(entry.data, current);
+    });
+
+    return Array.from(groups.entries()).map(([date, grouped]) => {
+      const ordered = sortEntries(grouped);
+      return {
+        date,
+        entries: ordered,
+        total: sumEntries(ordered)
+      };
+    }).sort((left, right) => left.date < right.date ? 1 : -1);
+  }
+
+  function generateId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+    return "entry-" + Date.now() + "-" + Math.random().toString(16).slice(2, 10);
+  }
+
+  function announce(message, tone) {
+    ui.toast.textContent = message;
+    ui.toast.className = "toast " + (tone === "error" ? "error" : "success");
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      ui.toast.className = "toast hidden";
+    }, 2800);
+  }
+
+  function getDateParts(isoDate) {
+    const date = parseIsoDate(isoDate) || new Date();
+    return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+  }
+
+  function daysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  function getWeekStart(date) {
+    const current = startOfDay(date);
+    const day = current.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    return addDays(current, diff);
+  }
+
+  function addDays(date, amount) {
+    const next = new Date(date);
+    next.setDate(next.getDate() + amount);
+    return startOfDay(next);
+  }
+
+  function startOfDay(date) {
+    const next = new Date(date);
+    next.setHours(0, 0, 0, 0);
+    return next;
+  }
+
+  function getEntriesInRange(start, end) {
+    const startTime = startOfDay(start).getTime();
+    const endTime = startOfDay(end).getTime();
+    return state.entries.filter((entry) => {
+      const current = parseIsoDate(entry.data);
+      if (!current) return false;
+      const currentTime = current.getTime();
+      return currentTime >= startTime && currentTime <= endTime;
+    });
+  }
+
+  function rangeLabel(start, end) {
+    return formatDate(todayISO(start)) + " até " + formatDate(todayISO(end));
+  }
+
+  function toIsoDate(year, month, day) {
+    return [
+      String(year).padStart(4, "0"),
+      String(month).padStart(2, "0"),
+      String(day).padStart(2, "0")
+    ].join("-");
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === STORAGE_KEY) {
+      state.entries = loadEntries();
+      refreshAll();
+    }
+    if (event.key === THEME_KEY) {
+      state.theme = loadTheme();
+      applyTheme(state.theme);
+      renderReports();
+    }
+  });
+})();
+
+  </script>
 </head>
 <body data-theme="dark">
   <div class="app-shell">
@@ -413,3 +2436,4 @@
   </div>
 </body>
 </html>
+
